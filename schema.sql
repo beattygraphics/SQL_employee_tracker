@@ -25,13 +25,6 @@ CREATE TABLE employee (
   role_id INT NOT NULL,
   manager_id INT NULL,
   PRIMARY KEY (id)
-  FOREIGN KEY (role_id) REFERENCES role (id),
-  FOREIGN KEY (manager_id) REFERENCES employee (id),
+  FOREIGN KEY (role_id) REFERENCES role(id),
+  FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
-
-SELECT employee.id, first_name, last_name, title, salary, department_name 
-FROM employee
-INNER JOIN role
-ON employee.role_id = role.id
-INNER JOIN department
-ON role.department_id = department.id
