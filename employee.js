@@ -2,8 +2,13 @@
 var mysql = require('mysql');
 var icon = require("asciiart-logo");
 var inquirer = require("inquirer");
+var promisemysql = require('promise-mysql');
 //var consoletable = require("console.table");
 var chalk = require("chalk");
+
+function log(msg){
+    console.log(msg);
+}
 
 log(chalk.green.bold("================================="));
 log(chalk.yellow(""));
@@ -21,7 +26,7 @@ const connectionProperties = {
     port: 3306,
     user: "root",
     password: "password",
-    database: "employees_DB"
+    database: "employee_DB"
 }
 
 // Creating Connection
@@ -118,11 +123,11 @@ function mainMenu(){
 function viewAllEmp(){
 
     // Query to view all employees
-    let query = "SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY ID ASC";
+    let query = "SELECT e.id, e.first_name, e.last_name, role.title, department.department_name AS department, role.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY ID ASC";
 
     // Query from connection
     connection.query(query, function(err, res) {
-        if(err) return err;
+        if(err) console.error (err);
         console.log("\n");
 
         // Display query results using console.table
@@ -165,7 +170,7 @@ function viewAllEmpByDept(){
         .then((answer) => {
 
             // Query all employees depending on selected department
-            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.name = '${answer.department}' ORDER BY ID ASC`;
+            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.department_name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.department_namexx = '${answer.department}' ORDER BY ID ASC`;
             connection.query(query, (err, res) => {
                 if(err) return err;
                 
@@ -210,7 +215,7 @@ function viewAllEmpByRole(){
         .then((answer) => {
 
             // Query all employees by role selected by user
-            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE role.title = '${answer.role}' ORDER BY ID ASC`;
+            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.department_name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE role.title = '${answer.role}' ORDER BY ID ASC`;
             connection.query(query, (err, res) => {
                 if(err) return err;
 
@@ -615,7 +620,7 @@ function viewAllEmpByMngr(){
             }
 
             // query all employees by selected manager
-            const query = `SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager
+            const query = `SELECT e.id, e.first_name, e.last_name, role.title, department.department_name AS department, role.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager
             FROM employee e
             LEFT JOIN employee m ON e.manager_id = m.id
             INNER JOIN role ON e.role_id = role.id
@@ -882,7 +887,7 @@ function viewDeptBudget(){
         return  Promise.all([
 
             // query all departments and salaries
-            conn.query("SELECT department.name AS department, role.salary FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY department ASC"),
+            conn.query("SELECT department.department_name AS department, role.salary FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY department ASC"),
             conn.query('SELECT name FROM department ORDER BY name ASC')
         ]);
     }).then(([deptSalaies, departments]) => {
