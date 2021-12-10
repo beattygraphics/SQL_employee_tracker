@@ -1,3 +1,20 @@
+//DEPENDENCIES
+var mysql = require('mysql');
+var icon = require("asciiart-logo");
+var inquirer = require("inquirer");
+//var consoletable = require("console.table");
+var chalk = require("chalk");
+
+log(chalk.green.bold("================================="));
+log(chalk.yellow(""));
+log(chalk.blue.bold("EMPLOYEE"));
+log(chalk.blue.bold("MANAGMENT"));
+log(chalk.blue.bold("TRACKER"));
+log(chalk.yellow(""));
+log(chalk.green.bold("================================="));
+
+
+
 // Connection Properties
 const connectionProperties = {
     host: "localhost",
