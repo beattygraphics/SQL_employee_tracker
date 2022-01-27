@@ -6,7 +6,7 @@ A CMS (Content Management System) that allows developers to easily access inform
 
 ## Table of Contents
 
-- [Code Utalized](#code-utilized)
+- [Code Utilized](#code-utilized)
 - [What to Expect](#what-to-expect)
 - [What to Expect](#what-to-expect)
 - [Walkthrough Video](#walkthough-video)
