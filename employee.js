@@ -3,7 +3,7 @@ var mysql = require('mysql');
 var icon = require("asciiart-logo");
 var inquirer = require("inquirer");
 var promisemysql = require('promise-mysql');
-var consoletable = require("console.table");
+// var consoletable = require("console.table");
 var chalk = require("chalk");
 
 function log(msg){
